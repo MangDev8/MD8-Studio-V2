@@ -1,421 +1,371 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MD8 Studio - Manga Video Creator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MD8 Studio Pro - AI Rin Editor</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- App Container -->
-  <div class="app-container">
-    
-    <!-- Top Header -->
-    <header class="app-header">
-      <div class="header-left">
-        <div class="logo">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polygon points="12 2 2 7 12 12 22 7 12 2" />
-            <polyline points="2 17 12 22 22 17" />
-            <polyline points="2 12 12 17 22 12" />
-          </svg>
-          <span>MD8 Studio</span>
-        </div>
-      </div>
-      
-      <div class="header-center">
-        <div class="aspect-presets">
-          <button class="btn-aspect active" data-ratio="16:9" title="Horizontal (16:9) - YouTube">📺 YouTube (16:9)</button>
-          <button class="btn-aspect" data-ratio="9:16" title="Vertical (9:16) - TikTok/Shorts">📱 TikTok (9:16)</button>
-          <button class="btn-aspect" data-ratio="1:1" title="Square (1:1) - Instagram">📸 Instagram (1:1)</button>
-        </div>
-      </div>
 
-      <div class="header-right">
-        <button id="btnBack" class="btn btn-secondary mr-sm">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          Kembali
-        </button>
-        <button id="btnExport" class="btn btn-primary mr-sm">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          Export
-        </button>
-        <button id="btnSave" class="btn btn-success">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          Disimpan
-        </button>
-      </div>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <span class="logo">MD8<span>Studio</span> <span class="rin">✦ Rin AI</span></span>
+            <input type="text" id="projectName" value="My Project">
+        </div>
+        <div class="header-center">
+            <button class="btn-aspect active" data-ratio="16:9">16:9</button>
+            <button class="btn-aspect" data-ratio="9:16">9:16</button>
+            <button class="btn-aspect" data-ratio="1:1">1:1</button>
+            <button class="btn-aspect" data-ratio="4:3">4:3</button>
+        </div>
+        <div class="header-right">
+            <button id="btnExport" class="btn btn-primary btn-sm">📤 Export</button>
+            <button id="btnSave" class="btn btn-sm">💾 Save</button>
+            <button id="btnToggleLeft" class="btn btn-sm">⊞</button>
+            <button id="btnToggleRight" class="btn btn-sm">⊟</button>
+            <button id="btnScript" class="btn btn-sm btn-purple">📝</button>
+        </div>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="app-main">
-      
-      <!-- Left Sidebar: Settings & Assets -->
-      <aside class="app-sidebar" id="sidebar">
-        
-        <!-- Project Name -->
-        <div class="sidebar-section project-meta">
-          <label class="section-label">NAMA PROJEK</label>
-          <input type="text" id="projectName" class="custom-input" value="Manga Video Creator">
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- LEFT PANEL -->
+        <div class="panel-left" id="leftPanel">
+            <span class="handle"></span>
+            <h4>📁 Media</h4>
+            <div class="upload-box">
+                📤 Upload Gambar
+                <input type="file" id="mediaInput" accept="image/*" multiple>
+            </div>
+            <div class="media-grid" id="mediaGrid"></div>
+
+            <div class="upload-box" style="font-size:9px;">
+                🎙️ Voice Over
+                <input type="file" id="voInput" accept="audio/*">
+            </div>
+            <div class="upload-box" style="font-size:9px;">
+                🎵 BGM
+                <input type="file" id="bgmInput" accept="audio/*">
+            </div>
+
+            <div class="audio-status">
+                <span id="voStatus">VO: -</span>
+                <span id="bgmStatus">BGM: -</span>
+            </div>
+
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                <button id="btnClearVO" class="btn btn-xs btn-danger" style="font-size:8px;">🗑️ Hapus VO</button>
+                <button id="btnClearBGM" class="btn btn-xs btn-danger" style="font-size:8px;">🗑️ Hapus BGM</button>
+            </div>
         </div>
 
-        <!-- 1. Media & Audio Section -->
-        <div class="sidebar-section">
-          <h3 class="section-title">1. MEDIA & AUDIO</h3>
-          
-          <!-- Voice Over Upload -->
-          <div class="media-upload-group">
-            <div class="flex-between">
-              <label class="media-label">Voice Over (Durasi Utama):</label>
-              <button id="btnDeleteVO" class="btn-link text-danger hidden">Hapus</button>
-            </div>
-            <div class="upload-zone" id="voUploadZone">
-              <input type="file" id="voFileInput" accept="audio/*" class="file-input-hidden">
-              <div class="upload-zone-content" id="voUploadContent">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                  <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
-                  <line x1="12" y1="19" x2="12" y2="23"/>
-                  <line x1="8" y1="23" x2="16" y2="23"/>
-                </svg>
-                <span>Pilih file audio voice over...</span>
-              </div>
-            </div>
-          </div>
+        <!-- CENTER PANEL -->
+        <div class="panel-center">
 
-          <!-- BGM Selection -->
-          <div class="media-upload-group">
-            <div class="flex-between">
-              <label class="media-label">Musik Background (BGM):</label>
-              <button id="btnDeleteBGM" class="btn-link text-danger hidden">Hapus</button>
-            </div>
-            <div class="bgm-selector-container">
-              <select id="bgmSelect" class="custom-select">
-                <option value="" selected>Pilih pelengkap musik...</option>
-                <option value="procedural-lofi">🎵 Lofi Beats (AI Procedural)</option>
-                <option value="procedural-synth">🎵 Synthwave Retro (AI Procedural)</option>
-                <option value="procedural-piano">🎵 Ambient Piano (AI Procedural)</option>
-                <option value="upload">📁 Upload BGM Sendiri...</option>
-              </select>
-              <input type="file" id="bgmFileInput" accept="audio/*" class="file-input-hidden">
-            </div>
-          </div>
-
-          <!-- Volume Controls -->
-          <div class="volume-controls-grid">
-            <div class="volume-slider-group">
-              <div class="flex-between font-xs">
-                <span>Volume VO</span>
-                <span id="voVolumeVal" class="accent-text">100%</span>
-              </div>
-              <input type="range" id="voVolumeSlider" min="0" max="150" value="100" class="custom-slider purple-slider">
-            </div>
-            <div class="volume-slider-group">
-              <div class="flex-between font-xs">
-                <span>Volume BGM</span>
-                <span id="bgmVolumeVal" class="accent-text">12%</span>
-              </div>
-              <input type="range" id="bgmVolumeSlider" min="0" max="100" value="12" class="custom-slider purple-slider">
-            </div>
-          </div>
-
-          <!-- Manga Image Sequencer Upload -->
-          <div class="media-upload-group mt-lg">
-            <div class="flex-between">
-              <label class="media-label">Susunan Gambar Manga:</label>
-              <button id="btnClearManga" class="btn-link text-danger hidden">Hapus Semua</button>
-            </div>
-            <div class="upload-zone manga-zone" id="mangaUploadZone">
-              <input type="file" id="mangaFileInput" accept="image/*" multiple class="file-input-hidden">
-              <div class="upload-zone-content">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                  <circle cx="8.5" cy="8.5" r="1.5"/>
-                  <polyline points="21 15 16 10 5 21"/>
-                </svg>
-                <span class="upload-main-text">Unggah Scene Manga</span>
-                <span class="upload-sub-text">Klik gambar untuk masukan ke segmen aktif</span>
-              </div>
-            </div>
-            <!-- Manga files status count -->
-            <div id="mangaStatusBadge" class="manga-status-badge hidden">
-              KIE AI siap (<span id="mangaCount">0</span>/<span id="mangaCountTotal">0</span>)
-            </div>
-            <!-- Manga upload file list -->
-            <div class="manga-file-list" id="mangaFileList">
-              <!-- Dynamically populated -->
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. AI Voice Settings (TTS) -->
-        <div class="sidebar-section">
-          <h3 class="section-title">2. PENGATURAN SUARA AI (TTS)</h3>
-          <div class="setting-item mt-sm">
-            <label class="section-label">PILIH SUARA AI</label>
-            <select id="ttsVoiceSelect" class="custom-select select-sm">
-              <!-- Dynamically loaded from SpeechSynthesis -->
-              <option value="system-default">Loading voices...</option>
-            </select>
-          </div>
-          <button id="btnGenerateAllTts" class="btn btn-purple btn-icon mt-md w-100">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-            </svg>
-            Hasilkan Suara AI (Semua Segmen)
-          </button>
-        </div>
-
-        <!-- 3. Subtitle Styles Customization -->
-        <div class="sidebar-section last-section">
-          <h3 class="section-title">3. GAYA SUBTITEL</h3>
-          
-          <div class="grid-2-cols mt-sm">
-            <div class="setting-item">
-              <label class="section-label">JENIS FONT</label>
-              <select id="subFontSelect" class="custom-select select-sm">
-                <option value="Outfit" selected>Outfit (Modern)</option>
-                <option value="Arial">Arial (Standard)</option>
-                <option value="Impact">Impact (Shorts Style)</option>
-                <option value="Courier New">Courier (Retro)</option>
-                <option value="JetBrains Mono">JetBrains Mono</option>
-              </select>
-            </div>
-            <div class="setting-item">
-              <label class="section-label">WARNA TEKS</label>
-              <select id="subColorSelect" class="custom-select select-sm">
-                <option value="#FFFFFF" selected>🤍 Putih</option>
-                <option value="#FFFF00">💛 Kuning</option>
-                <option value="#00FFFF">💙 Cyan</option>
-                <option value="#00FF00">💚 Hijau</option>
-                <option value="#FF00FF">💜 Magenta</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="setting-item mt-md">
-            <div class="flex-between">
-              <label class="section-label">UKURAN FONT</label>
-              <span id="subSizeVal" class="accent-text font-xs">24px</span>
-            </div>
-            <input type="range" id="subSizeSlider" min="14" max="48" value="24" class="custom-slider purple-slider">
-          </div>
-
-          <div class="setting-item mt-md">
-            <label class="section-label">ANIMASI SUBTITEL</label>
-            <select id="subStyleSelect" class="custom-select select-sm">
-              <option value="highlight" selected>Highlight Kata Aktif (Shorts)</option>
-              <option value="progressive">Muncul Kata Per Kata</option>
-              <option value="full">Muncul Semua Kata</option>
-            </select>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Right Workspace: Preview Player & Detailed Timeline Panel -->
-      <section class="workspace-right">
-        
-        <!-- Player Preview Section -->
-        <div class="preview-section">
-          <div class="preview-header">
-            <span>MD8 STUDIO - PLAYER PREVIEW</span>
-          </div>
-          
-          <!-- Canvas Viewport Frame -->
-          <div class="viewport-container">
-            <div class="viewport-aspect" id="viewportAspect">
-              <canvas id="playerCanvas" width="1280" height="720"></canvas>
-              <!-- Subtitle Overlay on Canvas -->
-              <div id="subtitleOverlay" class="subtitle-overlay">Mulai buat projek video mangamu disini.</div>
-              <!-- Preview Watermark or Indicator -->
-              <div id="playbackIndicator" class="playback-indicator hidden">RENDERING LIVE</div>
-            </div>
-          </div>
-
-          <!-- Video Player Controller Bar -->
-          <div class="player-controls">
-            <!-- Left Controls: Playback buttons & Time -->
-            <div class="controls-left">
-              <button id="btnPrevFrame" class="control-btn" title="Kembali ke Awal">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                  <polygon points="19 20 9 12 19 4 19 20"/>
-                  <line x1="5" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2"/>
-                </svg>
-              </button>
-              <button id="btnPlayPause" class="control-btn btn-play" title="Play / Pause">
-                <svg id="playIcon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                  <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-                <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                  <rect x="6" y="4" width="4" height="16"/>
-                  <rect x="14" y="4" width="4" height="16"/>
-                </svg>
-              </button>
-              <div class="time-display">
-                <span id="currentTime">00:00</span>
-                <span class="time-divider">/</span>
-                <span id="totalTime">00:00</span>
-              </div>
-            </div>
-
-            <!-- Center Controls: Scrubber Information -->
-            <div class="controls-center">
-              <div class="scrubbing-info-badge">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="16" x2="12" y2="12"/>
-                  <line x1="12" y1="8" x2="12.01" y2="8"/>
-                </svg>
-                <span>Geser slider untuk meninjau/edit frame video</span>
-              </div>
-            </div>
-
-            <!-- Right Controls: dB level meter & Volume / hide options -->
-            <div class="controls-right">
-              <div class="db-meter-container" title="Audio DB Level Meter">
-                <canvas id="dbMeterCanvas" width="80" height="16"></canvas>
-              </div>
-
-              <div class="player-volume-control">
-                <button id="btnMute" class="control-btn-sm" title="Mute BGM & VO">
-                  <svg id="volumeIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                  </svg>
-                  <svg id="muteIcon" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                    <line x1="23" y1="9" x2="17" y2="15"/>
-                    <line x1="17" y1="9" x2="23" y2="15"/>
-                  </svg>
-                </button>
-              </div>
-              <button id="btnHidePanel" class="btn btn-secondary-sm text-pink" title="Sembunyikan Panel Samping">Sembunyikan Panel</button>
-              <button id="btnPlaybackPreview" class="btn btn-dark-sm" title="Simulasi Mode Putar Mulus">Playback Preview</button>
-            </div>
-          </div>
-
-          <!-- Video Progress Bar (Scrubber) -->
-          <div class="scrubber-container">
-            <input type="range" id="videoScrubber" min="0" max="100" value="0" step="0.01" class="video-scrubber-slider">
-            <div class="scrubber-ticks" id="scrubberTicks">
-              <!-- Tick segment marks will be generated dynamically -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Detailed Timeline Panel (Tabbed Editor) -->
-        <div class="timeline-panel">
-          <div class="timeline-tab-bar">
-            <div class="tabs-left">
-              <button class="tab-btn active" data-tab="tabMangaTimeline">
-                GARIS WAKTU PANEL MANGA (<span id="mangaTimelineCount">0</span>)
-              </button>
-              <button class="tab-btn" data-tab="tabScriptNaskah">
-                SCRIPT / NASKAH VIDEO
-              </button>
-            </div>
-            
-            <div class="tabs-right">
-              <button id="btnAddSegment" class="btn btn-secondary-sm btn-icon">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <line x1="12" y1="5" x2="12" y2="19"/>
-                  <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                Tambah Segmen Manual
-              </button>
-            </div>
-          </div>
-
-          <!-- Tab Content Views -->
-          <div class="timeline-tab-content">
-            
-            <!-- 1. Garis Waktu Panel Manga Tab (Tidy cards) -->
-            <div class="tab-pane active" id="tabMangaTimeline">
-              <div class="segment-cards-container" id="segmentRowsContainer">
-                <!-- Dynamically populated card segments -->
-                <div class="empty-state">
-                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="9" y1="9" x2="15" y2="15"/>
-                    <line x1="15" y1="9" x2="9" y2="15"/>
-                  </svg>
-                  <p>Belum ada segmen. Tulis naskah di tab "SCRIPT / NASKAH VIDEO" atau klik "+ Tambah Segmen Manual" di kanan.</p>
+            <!-- PLAYER -->
+            <div class="player-area">
+                <div class="player-toolbar">
+                    <span style="font-size:9px;color:var(--text3);font-weight:600;">🎬 PLAYER</span>
+                    <div class="player-controls">
+                        <button id="btnRewind" class="ctrl-btn">⏮</button>
+                        <button id="btnPlay" class="ctrl-btn play">▶</button>
+                        <button id="btnMute" class="ctrl-btn">🔊</button>
+                        <span class="time-display"><span id="currentTime">00:00.0</span> / <span id="totalTime">00:00.0</span></span>
+                    </div>
+                    <div class="volume-control">
+                        <span>🔊</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="80">
+                    </div>
                 </div>
-              </div>
+                <div class="viewport">
+                    <canvas id="playerCanvas" width="1280" height="720"></canvas>
+                    <div class="subtitle" id="subtitleDisplay"></div>
+                </div>
+                <div class="scrubber-area">
+                    <input type="range" id="scrubber" min="0" max="100" value="0" step="0.1">
+                </div>
             </div>
 
-            <!-- 2. Script / Naskah Video Tab -->
-            <div class="tab-pane" id="tabScriptNaskah">
-              <div class="script-view-container">
-                <div class="script-view-sidebar">
-                  <div class="info-box-sm">
-                    <p>Masukkan script lengkap di sini. Setiap baris baru yang dipisahkan baris kosong akan otomatis menjadi satu segmen video baru.</p>
-                    <p class="mt-sm">Anda dapat memilih untuk mensinkronkannya dengan Voice Over eksternal ataupun suara kecerdasan buatan (AI Voice).</p>
-                  </div>
-                  <div class="sync-actions mt-md">
-                    <button id="btnSyncWithVO" class="btn btn-success btn-sm w-100 mb-sm" disabled>
-                      🔗 Sinkronisasi ke VO Lokal
-                    </button>
-                    <button id="btnSyncWithTTS" class="btn btn-purple btn-sm w-100">
-                      ⚡ Sinkron & Hasilkan Suara AI
-                    </button>
-                  </div>
+            <!-- TIMELINE -->
+            <div class="timeline-area">
+                <div class="timeline-header">
+                    <span class="label">⏱️ Timeline</span>
+                    <div class="timeline-tools">
+                        <button class="btn btn-xs" id="zoomOutBtn">−</button>
+                        <input type="range" class="zoom-slider" id="timelineZoom" min="1" max="50" value="10">
+                        <button class="btn btn-xs" id="zoomInBtn">+</button>
+                        <span class="zoom-label" id="zoomLabel">10x</span>
+                        <button id="btnAddClip" class="btn btn-xs btn-success">+ Clip</button>
+                        <button id="btnSplit" class="btn btn-xs" style="border-color:var(--yellow);color:var(--yellow);">✂️</button>
+                        <button id="btnDeleteClip" class="btn btn-xs btn-danger">✕</button>
+                        <button id="btnAutoAnim" class="btn btn-xs btn-purple">🤖 Anim</button>
+                        <button id="btnApplyAllAnim" class="btn btn-xs" style="border-color:var(--accent);color:var(--accent);">📌 Apply All</button>
+                        <button id="btnAddTransition" class="btn btn-xs" style="border-color:var(--orange);color:var(--orange);">🔄 Transisi</button>
+                    </div>
                 </div>
-                <div class="script-view-editor">
-                  <textarea id="scriptTextarea" class="script-textarea" placeholder="Tuliskan naskah per segmen di sini..."></textarea>
+                <div class="timeline-body" id="timelineBody">
+                    <div class="timeline-inner" id="timelineInner">
+                        <div class="ruler" id="ruler"></div>
+                        <div class="track" id="trackVideo"><span class="track-label">🎬 VIDEO</span></div>
+                        <div class="track" id="trackVO"><span class="track-label">🎙️ VO</span></div>
+                        <div class="track" id="trackBGM"><span class="track-label">🎵 BGM</span></div>
+                        <div class="playhead-line" id="playheadLine" style="left:0;"></div>
+                    </div>
                 </div>
-              </div>
             </div>
 
-          </div>
         </div>
 
-      </section>
-    </main>
-  </div>
+        <!-- RIGHT PANEL -->
+        <div class="panel-right" id="rightPanel">
+            <span class="handle"></span>
+            <h4>🎬 Efek</h4>
+            <div class="effect-grid">
+                <div class="effect-item" data-effect="none"><span class="icon">⏺️</span>Normal</div>
+                <div class="effect-item" data-effect="fade-in"><span class="icon">🌅</span>Fade In</div>
+                <div class="effect-item" data-effect="fade-out"><span class="icon">🌇</span>Fade Out</div>
+                <div class="effect-item" data-effect="flash"><span class="icon">⚡</span>Flash</div>
+                <div class="effect-item big" data-effect="cinematic"><span class="icon">🎬</span>Cinematic</div>
+            </div>
 
-  <!-- Exporting Modal Overlay -->
-  <div id="modalExportOverlay" class="modal-overlay hidden">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Sedang Mengekspor Video...</h3>
-        <button id="btnCancelExport" class="btn-close">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>Harap tunggu. MD8 Studio sedang merender manga, teks subtitel perkata, dan audio ke format video.</p>
-        <div class="progress-bar-container">
-          <div id="exportProgressBar" class="progress-bar-fill" style="width: 0%"></div>
+            <h4>🎞️ Animasi</h4>
+            <div class="effect-grid">
+                <div class="effect-item" data-anim="pan-left"><span class="icon">➡️</span>Pan Kiri</div>
+                <div class="effect-item" data-anim="pan-right"><span class="icon">⬅️</span>Pan Kanan</div>
+                <div class="effect-item" data-anim="pan-up"><span class="icon">⬆️</span>Pan Atas</div>
+                <div class="effect-item" data-anim="pan-down"><span class="icon">⬇️</span>Pan Bawah</div>
+                <div class="effect-item" data-anim="zoom-in"><span class="icon">🔍</span>Zoom In</div>
+                <div class="effect-item" data-anim="zoom-out"><span class="icon">🔎</span>Zoom Out</div>
+                <div class="effect-item" data-anim="bounce"><span class="icon">🏀</span>Bounce</div>
+                <div class="effect-item" data-anim="tracking"><span class="icon">🎯</span>Tracking</div>
+                <div class="effect-item" data-anim="elastic"><span class="icon">💫</span>Elastic</div>
+                <div class="effect-item" data-anim="pop"><span class="icon">💥</span>Pop</div>
+            </div>
+
+            <h4 style="display:flex;align-items:center;gap:4px;">🌸 Rin AI <span style="font-size:8px;color:var(--text3);font-weight:400;">✦ asisten pintar</span></h4>
+
+            <!-- AI CHAT -->
+            <div class="ai-chat-panel">
+                <div class="ai-chat-header">
+                    <span class="ai-name">🌸 Rin <span>✦ AI Assistant</span></span>
+                    <span class="ai-status" id="aiStatus">● Online</span>
+                </div>
+                <div class="ai-chat-messages" id="chatMessages">
+                    <div class="msg ai">
+                        <span class="label">🌸 Rin</span>
+                        Halo! Aku Rin, asisten AI-mu. 🎀<br>
+                        Aku bisa bantu:<br>
+                        📝 Buat script manga dengan panel terstruktur<br>
+                        🎬 Analisis karakter<br>
+                        🖼️ Edit gambar & background<br>
+                        🎵 Tag & sync audio dengan scene<br>
+                        🔄 20+ Transisi halus antar panel<br><br>
+                        Ceritakan ide mangamu! ✨
+                    </div>
+                </div>
+                <div class="ai-chat-input">
+                    <input type="text" id="chatInput" placeholder="Tanya Rin...">
+                    <button id="btnChatSend" class="btn btn-ai btn-xs">Kirim</button>
+                </div>
+            </div>
+
+            <!-- SCRIPT PREVIEW -->
+            <div class="script-preview-panel" id="scriptPreviewPanel">
+                <div class="script-preview-header">
+                    <span>📄 SCRIPT PREVIEW</span>
+                    <div class="actions">
+                        <button id="btnCopyScript" class="btn btn-xs" style="border-color:var(--accent);color:var(--accent);">📋 Copy</button>
+                        <button id="btnApplyScript" class="btn btn-xs btn-success">✅ Apply</button>
+                        <button id="btnClosePreview" class="btn btn-xs btn-danger">✕</button>
+                    </div>
+                </div>
+                <div class="script-preview-body" id="scriptPreviewBody"></div>
+            </div>
+
+            <div class="ai-progress" id="aiProgress">
+                <div class="bar"><div class="fill" id="aiProgressFill"></div></div>
+                <span class="text" id="aiProgressText">Memproses...</span>
+            </div>
+
+            <h4>🎚️ Kontrol Gambar</h4>
+            <div class="img-controls" id="imgControls">
+                <div class="row">
+                    <span>Skala</span>
+                    <input type="range" id="imgScale" min="30" max="200" value="100">
+                    <span class="val" id="imgScaleVal">100%</span>
+                </div>
+                <div class="row">
+                    <span>Blur BG</span>
+                    <input type="range" id="imgBlur" min="0" max="25" value="0">
+                    <span class="val" id="imgBlurVal">0px</span>
+                </div>
+                <div class="row">
+                    <span>Opacity</span>
+                    <input type="range" id="imgOpacity" min="20" max="100" value="100">
+                    <span class="val" id="imgOpacityVal">100%</span>
+                </div>
+                <div class="row">
+                    <span>Brightness</span>
+                    <input type="range" id="imgBrightness" min="50" max="150" value="100">
+                    <span class="val" id="imgBrightnessVal">100%</span>
+                </div>
+                <div class="btn-row">
+                    <button id="btnApplyImageSettings" class="btn btn-xs btn-purple">Apply</button>
+                    <button id="btnAIAdjustImage" class="btn btn-xs btn-ai">✨ AI Adjust</button>
+                    <button id="btnResetImage" class="btn btn-xs btn-danger">↺ Reset</button>
+                </div>
+            </div>
+
+            <h4>🎚️ Volume Audio</h4>
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:4px 6px;">
+                <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:var(--text2);">
+                    <span>🔊 VO</span>
+                    <input type="range" id="voVolume" min="0" max="200" value="100" style="flex:1;height:3px;-webkit-appearance:none;appearance:none;background:var(--border);border-radius:2px;outline:none;">
+                    <span class="val" id="voVolumeVal" style="min-width:30px;text-align:right;font-size:8px;color:var(--text3);">100%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:var(--text2);">
+                    <span>🎵 BGM</span>
+                    <input type="range" id="bgmVolume" min="0" max="200" value="80" style="flex:1;height:3px;-webkit-appearance:none;appearance:none;background:var(--border);border-radius:2px;outline:none;">
+                    <span class="val" id="bgmVolumeVal" style="min-width:30px;text-align:right;font-size:8px;color:var(--text3);">80%</span>
+                </div>
+            </div>
+
+            <h4>🏷️ VO Tag</h4>
+            <div class="vo-tag-input">
+                <input type="text" id="voTagInput" placeholder="Nama tag...">
+                <button id="btnAddVOTag" class="btn btn-xs btn-purple">Add</button>
+            </div>
+
+            <h4>🎚️ Audio Edit</h4>
+            <div style="display:flex;gap:3px;flex-wrap:wrap;">
+                <button id="btnFadeIn" class="btn btn-xs" style="border-color:var(--yellow);color:var(--yellow);">🌅 Fade In</button>
+                <button id="btnFadeOut" class="btn btn-xs" style="border-color:var(--yellow);color:var(--yellow);">🌇 Fade Out</button>
+                <button id="btnSyncAudio" class="btn btn-xs btn-purple">🎵 Sync</button>
+            </div>
         </div>
-        <div class="flex-between font-xs text-grey mt-sm">
-          <span id="exportStatusText">Menyiapkan frame...</span>
-          <span id="exportProgressText">0%</span>
-        </div>
-        <div class="export-preview-container mt-md">
-          <canvas id="exportPreviewCanvas" width="640" height="360" class="export-preview-canvas"></canvas>
-        </div>
-      </div>
+
     </div>
-  </div>
 
-  <!-- Notification Toast -->
-  <div id="toastNotification" class="toast-notification hidden">
-    <span id="toastMessage">Notifikasi sistem</span>
-  </div>
+    <!-- SCRIPT PANEL -->
+    <div class="script-panel" id="scriptPanel">
+        <div class="script-panel-header">
+            <span>📄 SCRIPT & NARASI</span>
+            <button id="btnCloseScript">✕</button>
+        </div>
+        <textarea id="scriptText" placeholder="Tulis script di sini...&#10;Setiap paragraf = 1 panel/scene"></textarea>
+        <div class="script-panel-actions">
+            <button id="btnSyncScript" class="btn btn-xs btn-success">📝 Buat Clip</button>
+            <button id="btnAIScriptGen" class="btn btn-xs btn-ai">🌸 Rin Buat Script</button>
+        </div>
+    </div>
 
-  <!-- Load logic -->
-  <script src="app.js"></script>
+    <!-- TRANSISI POPUP -->
+    <div class="transisi-popup" id="transisiPopup">
+        <div class="box">
+            <div class="title">🔄 Pilih Transisi (20+)</div>
+            <div class="grid" id="transisiGrid">
+                <div class="item active" data-trans="none"><span class="icon">⏺️</span>Tanpa</div>
+                <div class="item" data-trans="fade"><span class="icon">🌅</span>Fade</div>
+                <div class="item" data-trans="slide-left"><span class="icon">⬅️</span>Slide Kiri</div>
+                <div class="item" data-trans="slide-right"><span class="icon">➡️</span>Slide Kanan</div>
+                <div class="item" data-trans="slide-up"><span class="icon">⬆️</span>Slide Atas</div>
+                <div class="item" data-trans="slide-down"><span class="icon">⬇️</span>Slide Bawah</div>
+                <div class="item" data-trans="zoom-in"><span class="icon">🔍</span>Zoom In</div>
+                <div class="item" data-trans="zoom-out"><span class="icon">🔎</span>Zoom Out</div>
+                <div class="item" data-trans="wipe-left"><span class="icon">📏</span>Wipe Kiri</div>
+                <div class="item" data-trans="wipe-right"><span class="icon">📏</span>Wipe Kanan</div>
+                <div class="item" data-trans="cross"><span class="icon">🌊</span>Cross</div>
+                <div class="item" data-trans="flash"><span class="icon">⚡</span>Flash</div>
+                <div class="item" data-trans="bounce"><span class="icon">🏀</span>Bounce</div>
+                <div class="item" data-trans="rotate"><span class="icon">🔄</span>Rotate</div>
+                <div class="item" data-trans="elastic"><span class="icon">💫</span>Elastic</div>
+                <div class="item" data-trans="pop"><span class="icon">💥</span>Pop</div>
+                <div class="item" data-trans="blur"><span class="icon">🌫️</span>Blur</div>
+                <div class="item" data-trans="shutter"><span class="icon">📷</span>Shutter</div>
+                <div class="item" data-trans="ripple"><span class="icon">🌊</span>Ripple</div>
+                <div class="item" data-trans="glitch"><span class="icon">📺</span>Glitch</div>
+                <div class="item" data-trans="pixelate"><span class="icon">🔲</span>Pixelate</div>
+                <div class="item" data-trans="vortex"><span class="icon">🌀</span>Vortex</div>
+            </div>
+            <div class="btn-row">
+                <button id="btnTransisiApply" class="btn btn-primary">✅ Terapkan</button>
+                <button id="btnTransisiClose" class="btn btn-danger">✕ Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXPORT MODAL -->
+    <div class="export-modal" id="exportModal">
+        <div class="box">
+            <div class="title">📤 Ekspor <span>Video</span></div>
+            <div class="subtitle">Pilih resolusi dan kualitas</div>
+
+            <div class="res-grid" id="resGrid">
+                <div class="res-item active" data-res="1080p">
+                    <div class="label">1080p</div>
+                    <div class="detail">1920×1080</div>
+                    <span class="badge">HD</span>
+                </div>
+                <div class="res-item" data-res="720p">
+                    <div class="label">720p</div>
+                    <div class="detail">1280×720</div>
+                    <span class="badge">SD</span>
+                </div>
+                <div class="res-item" data-res="480p">
+                    <div class="label">480p</div>
+                    <div class="detail">854×480</div>
+                    <span class="badge">Low</span>
+                </div>
+                <div class="res-item" data-res="4K">
+                    <div class="label">4K</div>
+                    <div class="detail">3840×2160</div>
+                    <span class="badge">UHD</span>
+                </div>
+                <div class="res-item" data-res="2K">
+                    <div class="label">2K</div>
+                    <div class="detail">2560×1440</div>
+                    <span class="badge">QHD</span>
+                </div>
+                <div class="res-item" data-res="custom">
+                    <div class="label">Custom</div>
+                    <div class="detail">Atur sendiri</div>
+                </div>
+            </div>
+
+            <div class="mb-slider">
+                <label>Bitrate</label>
+                <input type="range" id="exportBitrate" min="1" max="20" value="8" step="0.5">
+                <span class="val" id="exportBitrateVal">8 Mbps</span>
+            </div>
+
+            <div class="progress-wrap">
+                <div class="progress-bar" id="exportProgressBar"></div>
+            </div>
+            <div class="progress-text">
+                <span id="exportStatus">Menyiapkan...</span>
+                <span id="exportPercent">0%</span>
+            </div>
+            <div class="progress-detail" id="exportDetail">Frame 0 / 0</div>
+            <div class="preview-box">
+                <canvas id="exportPreview"></canvas>
+            </div>
+            <div class="time-estimate" id="exportEstimate">⏱️ Estimasi waktu: --</div>
+            <div class="btn-row">
+                <button id="btnStartExport" class="btn btn-primary">🚀 Ekspor</button>
+                <button id="btnCancelExport" class="btn btn-danger">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <span id="toastIcon">ℹ️</span>
+        <span id="toastMsg">Pesan</span>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
